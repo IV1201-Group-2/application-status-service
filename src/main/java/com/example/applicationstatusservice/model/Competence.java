@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
 /**
  * Person model representing the database structure created for each registered user.
  * {@code @Data} automatically generates getters and setters for this class.

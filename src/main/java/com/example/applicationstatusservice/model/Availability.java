@@ -26,28 +26,28 @@ import java.time.LocalDate;
 @Table(name = "availability")
 public class Availability {
 
-        /**
-         * {@code @Id} marks the availability_id as the primary key
-         * {@code @GeneratedValue} sets the availability_id to be automatically generated and
-         * incremented by the database.
-         */
-        @Id
-        @GeneratedValue(strategy = GenerationType.IDENTITY)
-        private Long availability_id;
+    /**
+     * {@code @Id} marks the availability_id as the primary key
+     * {@code @GeneratedValue} sets the availability_id to be automatically generated and
+     * incremented by the database.
+     */
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long availability_id;
 
-        /**
-         * The first name of the registering person.
-         */
-        private Long person_id;
+    /**
+     * The first name of the registering person.
+     */
+    private Long person_id;
 
-        /**
-         * Starting availability period of the applicant from_date
-         */
-        private LocalDate from_date;
+    /**
+     * Starting availability period of the applicant from_date
+     */
+    private LocalDate from_date;
 
-        /**
-         * Ending availability period of the applicant to_date
-         */
-        private LocalDate to_date;
+    /**
+     * Ending availability period of the applicant to_date
+     */
+    private LocalDate to_date;
 
 }
