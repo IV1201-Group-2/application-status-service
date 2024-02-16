@@ -1,7 +1,10 @@
 package com.example.applicationstatusservice;
 
+import com.example.applicationstatusservice.model.Person;
 import com.example.applicationstatusservice.model.dto.ApplicationStatusDTO;
+import com.example.applicationstatusservice.model.dto.PersonDTO;
 import com.example.applicationstatusservice.service.ApplicationStatusService;
+import com.example.applicationstatusservice.service.PersonService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -20,10 +23,13 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class ApplicationStatusIntegrationTest {
 
     @Container
-    private static final PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>("postgres:latest").withDatabaseName("postgresg2").withUsername("postgres").withPassword("Qwerty123456!");
+    private static final PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>("postgres:latest").withDatabaseName("postgresglobalapp").withUsername("postgres").withPassword("Qwerty123456!");
 
     @Autowired
     private ApplicationStatusService applicationStatusService;
+
+    @Autowired
+    private PersonService personService;
 
     @DynamicPropertySource
     public static void testProps(DynamicPropertyRegistry dynamicPropertyRegistry) {
@@ -38,7 +44,9 @@ public class ApplicationStatusIntegrationTest {
 
     @Test
     void personIdValid() throws Exception {
-        ApplicationStatusDTO applicationStatusDTO = new ApplicationStatusDTO(11L, "Pending");
+        PersonDTO personDTO = new PersonDTO(1L, "Clara", "Eklund", "202203323434", "claraeklund@kth.com", "123", "claraek");
+        personService.saveApplicant(personDTO);
+        ApplicationStatusDTO applicationStatusDTO = new ApplicationStatusDTO(1L, "Pending");
         assertEquals("VALID_DATA", applicationStatusService.isPersonIdValid(applicationStatusDTO.getPerson_id()));
 
     }
@@ -75,7 +83,5 @@ public class ApplicationStatusIntegrationTest {
     void statusInvalid() throws Exception {
         ApplicationStatusDTO applicationStatusDTO = new ApplicationStatusDTO(11L, "random");
         assertEquals("INVALID_DATA", applicationStatusService.isStatusValid(applicationStatusDTO.getStatus()));
-
     }
 }
-
