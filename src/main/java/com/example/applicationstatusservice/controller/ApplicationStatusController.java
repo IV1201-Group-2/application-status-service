@@ -31,7 +31,10 @@ public class ApplicationStatusController {
     public ResponseEntity<Object> handleApplicationStatus(@RequestBody ApplicationStatusDTO applicationStatusDTO) {
         String personIdErrorMessage = applicationStatusService.isPersonIdValid(applicationStatusDTO.getPerson_id());
         String statusErrorMessage = applicationStatusService.isStatusValid(applicationStatusDTO.getStatus());
-        
+
+        System.out.println("personIdErrorMessage" + personIdErrorMessage);
+        System.out.println("statusErrorMessage" + statusErrorMessage);
+
         if("INVALID_DATA".equals(personIdErrorMessage)){
             return new ResponseEntity<>(new ErrorDTO(personIdErrorMessage), HttpStatus.BAD_REQUEST);
         } else if ("INVALID_DATA".equals(statusErrorMessage)) {

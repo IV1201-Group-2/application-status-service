@@ -24,7 +24,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class ApplicationStatusControllerIntegrationTest {
 
     @Container
-    private static final PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>("postgres:latest").withDatabaseName("postgresglobalapp").withUsername("postgres").withPassword("Qwerty123456!");
+    private static final PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>("postgres:latest").withDatabaseName("postgrestest").withUsername("postgres").withPassword("Qwerty123456!");
 
     @Autowired
     private ApplicationStatusController applicationStatusController;
@@ -46,9 +46,9 @@ public class ApplicationStatusControllerIntegrationTest {
 
     @Test
     void personIdValid() throws Exception {
-        PersonDTO personDTO = new PersonDTO(1L, "Clara", "Eklund", "202203323434", "claraeklund@kth.com", "123", "claraek");
+        PersonDTO personDTO = new PersonDTO(5L, "Clara", "Eklund", "202203323434", "claraeklund@kth.com", "123", "claraek");
         personService.saveApplicant(personDTO);
-        ApplicationStatusDTO applicationStatusDTO = new ApplicationStatusDTO(1L, "Pending");
+        ApplicationStatusDTO applicationStatusDTO = new ApplicationStatusDTO(5L, "Pending");
         ResponseEntity<Object> resp = applicationStatusController.handleApplicationStatus(applicationStatusDTO);
         assertEquals(HttpStatus.OK, resp.getStatusCode());
     }
@@ -62,36 +62,36 @@ public class ApplicationStatusControllerIntegrationTest {
 
     @Test
     void statusPendingValid() throws Exception {
-        PersonDTO personDTO = new PersonDTO(1L, "Clara", "Eklund", "202203323434", "claraeklund@kth.com", "123", "claraek");
+        PersonDTO personDTO = new PersonDTO(6L, "Clara", "Eklund", "202203323434", "claraeklund@kth.com", "123", "claraek");
         personService.saveApplicant(personDTO);
-        ApplicationStatusDTO applicationStatusDTO = new ApplicationStatusDTO(1L, "Pending");
+        ApplicationStatusDTO applicationStatusDTO = new ApplicationStatusDTO(6L, "Pending");
         ResponseEntity<Object> resp = applicationStatusController.handleApplicationStatus(applicationStatusDTO);
         assertEquals(HttpStatus.OK, resp.getStatusCode());
     }
 
     @Test
     void statusAcceptValid() throws Exception {
-        PersonDTO personDTO = new PersonDTO(1L, "Clara", "Eklund", "202203323434", "claraeklund@kth.com", "123", "claraek");
+        PersonDTO personDTO = new PersonDTO(7L, "Clara", "Eklund", "202203323434", "claraeklund@kth.com", "123", "claraek");
         personService.saveApplicant(personDTO);
-        ApplicationStatusDTO applicationStatusDTO = new ApplicationStatusDTO(1L, "Accept");
+        ApplicationStatusDTO applicationStatusDTO = new ApplicationStatusDTO(7L, "Accept");
         ResponseEntity<Object> resp = applicationStatusController.handleApplicationStatus(applicationStatusDTO);
         assertEquals(HttpStatus.OK, resp.getStatusCode());
     }
 
     @Test
     void statusRejectValid() throws Exception {
-        PersonDTO personDTO = new PersonDTO(1L, "Clara", "Eklund", "202203323434", "claraeklund@kth.com", "123", "claraek");
+        PersonDTO personDTO = new PersonDTO(8L, "Clara", "Eklund", "202203323434", "claraeklund@kth.com", "123", "claraek");
         personService.saveApplicant(personDTO);
-        ApplicationStatusDTO applicationStatusDTO = new ApplicationStatusDTO(1L, "Reject");
+        ApplicationStatusDTO applicationStatusDTO = new ApplicationStatusDTO(8L, "Reject");
         ResponseEntity<Object> resp = applicationStatusController.handleApplicationStatus(applicationStatusDTO);
         assertEquals(HttpStatus.OK, resp.getStatusCode());
     }
 
     @Test
     void statusInvalid() throws Exception {
-        PersonDTO personDTO = new PersonDTO(1L, "Clara", "Eklund", "202203323434", "claraeklund@kth.com", "123", "claraek");
+        PersonDTO personDTO = new PersonDTO(9L, "Clara", "Eklund", "202203323434", "claraeklund@kth.com", "123", "claraek");
         personService.saveApplicant(personDTO);
-        ApplicationStatusDTO applicationStatusDTO = new ApplicationStatusDTO(1L, "random");
+        ApplicationStatusDTO applicationStatusDTO = new ApplicationStatusDTO(9L, "random");
         ResponseEntity<Object> resp = applicationStatusController.handleApplicationStatus(applicationStatusDTO);
         assertEquals(HttpStatus.BAD_REQUEST, resp.getStatusCode());
     }

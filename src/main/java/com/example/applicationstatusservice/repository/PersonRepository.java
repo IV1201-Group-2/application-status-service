@@ -12,6 +12,4 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface PersonRepository extends JpaRepository<Person, Long> {
 
-    @Override
-    boolean existsById(@NonNull Long personId);
 }
