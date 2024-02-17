@@ -2,9 +2,9 @@ package com.example.applicationstatusservice;
 
 import com.example.applicationstatusservice.model.Person;
 import com.example.applicationstatusservice.model.dto.ApplicationStatusDTO;
-import com.example.applicationstatusservice.model.dto.PersonDTO;
+import com.example.applicationstatusservice.repository.PersonRepository;
 import com.example.applicationstatusservice.service.ApplicationStatusService;
-import com.example.applicationstatusservice.service.PersonService;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -29,7 +29,7 @@ public class ApplicationStatusIntegrationTest {
     private ApplicationStatusService applicationStatusService;
 
     @Autowired
-    private PersonService personService;
+    private PersonRepository personRepository;
 
     @DynamicPropertySource
     public static void testProps(DynamicPropertyRegistry dynamicPropertyRegistry) {
@@ -42,10 +42,21 @@ public class ApplicationStatusIntegrationTest {
         System.out.println("Is container running?");
     }
 
+    @BeforeEach
+    void setup() {
+        Person person = new Person();
+        person.setPerson_id(1L);
+        person.setName("Clara");
+        person.setSurname("Eklund");
+        person.setPnr("200101012923");
+        person.setEmail("clara@kth.se");
+        person.setPassword("123");
+        person.setUsername("claraek");
+        personRepository.save(person);
+    }
+
     @Test
     void personIdValid() throws Exception {
-        PersonDTO personDTO = new PersonDTO(1L, "Clara", "Eklund", "202203323434", "claraeklund@kth.com", "123", "claraek");
-        personService.saveApplicant(personDTO);
         ApplicationStatusDTO applicationStatusDTO = new ApplicationStatusDTO(1L, "Pending");
         assertEquals("VALID_DATA", applicationStatusService.isPersonIdValid(applicationStatusDTO.getPerson_id()));
 
@@ -60,7 +71,7 @@ public class ApplicationStatusIntegrationTest {
 
     @Test
     void statusPendingValid() throws Exception {
-        ApplicationStatusDTO applicationStatusDTO = new ApplicationStatusDTO(11L, "Pending");
+        ApplicationStatusDTO applicationStatusDTO = new ApplicationStatusDTO(1L, "Pending");
         assertEquals("VALID_DATA", applicationStatusService.isStatusValid(applicationStatusDTO.getStatus()));
 
     }
