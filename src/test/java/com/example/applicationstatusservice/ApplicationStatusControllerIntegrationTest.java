@@ -1,12 +1,10 @@
 package com.example.applicationstatusservice;
 
 import com.example.applicationstatusservice.controller.ApplicationStatusController;
-import com.example.applicationstatusservice.model.Person;
 import com.example.applicationstatusservice.model.dto.ApplicationStatusDTO;
 import com.example.applicationstatusservice.model.dto.PersonDTO;
 import com.example.applicationstatusservice.repository.PersonRepository;
 import com.example.applicationstatusservice.service.PersonService;
-import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +18,7 @@ import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
 @Testcontainers
@@ -52,7 +50,7 @@ public class ApplicationStatusControllerIntegrationTest {
 
     @BeforeEach
     void saveAPerson() {
-        PersonDTO personDTO = new PersonDTO( "Clara", "Eklund", "202203323434", "claraeklund@kth.com", "123", "claraek");
+        PersonDTO personDTO = new PersonDTO("Clara", "Eklund", "202203323434", "claraeklund@kth.com", "123", "claraek");
         personService.saveApplicant(personDTO);
 
         System.out.println("person" + personRepository.findByUsername("claraek"));

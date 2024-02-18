@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
 public class ApplicationStatusController {
-    
+
     private final ApplicationStatusService applicationStatusService;
 
     public ApplicationStatusController(ApplicationStatusService applicationStatusService) {
@@ -35,7 +35,7 @@ public class ApplicationStatusController {
         System.out.println("personIdErrorMessage" + personIdErrorMessage);
         System.out.println("statusErrorMessage" + statusErrorMessage);
 
-        if("INVALID_DATA".equals(personIdErrorMessage)){
+        if ("INVALID_DATA".equals(personIdErrorMessage)) {
             return new ResponseEntity<>(new ErrorDTO(personIdErrorMessage), HttpStatus.BAD_REQUEST);
         } else if ("INVALID_DATA".equals(statusErrorMessage)) {
             return new ResponseEntity<>(new ErrorDTO(statusErrorMessage), HttpStatus.BAD_REQUEST);

@@ -1,5 +1,6 @@
 package com.example.applicationstatusservice.model.dto;
-import lombok.*;
+
+import lombok.Getter;
 
 @Getter
 public class ApplicationStatusDTO {

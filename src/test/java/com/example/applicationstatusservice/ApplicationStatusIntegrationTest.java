@@ -1,6 +1,5 @@
 package com.example.applicationstatusservice;
 
-import com.example.applicationstatusservice.model.Person;
 import com.example.applicationstatusservice.model.dto.ApplicationStatusDTO;
 import com.example.applicationstatusservice.model.dto.PersonDTO;
 import com.example.applicationstatusservice.repository.PersonRepository;
@@ -49,7 +48,7 @@ public class ApplicationStatusIntegrationTest {
 
     @BeforeEach
     void saveAPerson() {
-        PersonDTO personDTO = new PersonDTO( "Clara", "Eklund", "202203323434", "claraeklund@kth.com", "123", "claraek");
+        PersonDTO personDTO = new PersonDTO("Clara", "Eklund", "202203323434", "claraeklund@kth.com", "123", "claraek");
         personService.saveApplicant(personDTO);
 
         System.out.println("person" + personRepository.findByUsername("claraek"));
