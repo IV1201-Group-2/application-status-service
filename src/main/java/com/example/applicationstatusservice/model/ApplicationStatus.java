@@ -1,5 +1,6 @@
 package com.example.applicationstatusservice.model;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -12,6 +13,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Builder
 @Table(name = "application_status")
+@SuppressFBWarnings("EI_EXPOSE_REP")
 public class ApplicationStatus {
 
     @Id
