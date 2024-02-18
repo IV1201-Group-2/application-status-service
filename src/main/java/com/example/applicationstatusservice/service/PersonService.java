@@ -41,7 +41,15 @@ public class PersonService {
      */
     @Transactional
     public void saveApplicant(PersonDTO personDTO) {
-        Person person = Person.builder().name(personDTO.getName()).surname(personDTO.getSurname()).pnr(personDTO.getPnr()).email(personDTO.getEmail()).password(personDTO.getPassword()).role_id(2).username(personDTO.getUsername()).build();
+        Person person = Person.builder()
+                .name(personDTO.getName())
+                .surname(personDTO.getSurname())
+                .pnr(personDTO.getPnr())
+                .email(personDTO.getEmail())
+                .password(personDTO.getPassword())
+                .role_id(2)
+                .username(personDTO.getUsername())
+                .build();
         personRepository.save(person);
     }
 }

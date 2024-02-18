@@ -23,21 +23,29 @@ public class ApplicationStatusService {
     }
 
     @Transactional
-    public void updateApplicationStatus(ApplicationStatusDTO applicationStatusDTO){
+    public void updateApplicationStatus(ApplicationStatusDTO applicationStatusDTO) {
         Long personId = applicationStatusDTO.getPerson_id();
-        Person person = new Person(personId);
-        ApplicationStatus applicationStatus = ApplicationStatus.builder().person(person).status(applicationStatusDTO.getStatus()).build();
-        applicationStatusRepository.save(applicationStatus);
+        String status = applicationStatusDTO.getStatus();
+
+        Person person = personRepository.findById(personId).orElse(null);
+        ApplicationStatus checkApplicationStatus = applicationStatusRepository.findByPerson(person);
+        if (checkApplicationStatus != null) {
+            checkApplicationStatus.setStatus(status);
+            applicationStatusRepository.save(checkApplicationStatus);
+        } else if (person != null) {
+            ApplicationStatus applicationStatus = ApplicationStatus.builder().person(person).status(applicationStatusDTO.getStatus()).build();
+            applicationStatusRepository.save(applicationStatus);
+        }
     }
 
-    public String isPersonIdValid(Long personId){
-         if(personRepository.existsById(personId)){
-             return "VALID_DATA";
-         }
-         return "INVALID_DATA";
+    public String isPersonIdValid(Long personId) {
+        if (personRepository.existsById(personId)) {
+            return "VALID_DATA";
+        }
+        return "INVALID_DATA";
     }
 
-    public String isStatusValid(String status){
+    public String isStatusValid(String status) {
         return switch (status) {
             case "Accept", "Reject", "Pending" -> "VALID_DATA";
             default -> "INVALID_DATA";

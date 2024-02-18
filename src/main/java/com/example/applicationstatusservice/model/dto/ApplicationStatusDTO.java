@@ -1,5 +1,4 @@
 package com.example.applicationstatusservice.model.dto;
-
 import lombok.*;
 
 @Getter

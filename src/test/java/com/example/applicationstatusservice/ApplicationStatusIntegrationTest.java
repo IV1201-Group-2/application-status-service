@@ -2,8 +2,10 @@ package com.example.applicationstatusservice;
 
 import com.example.applicationstatusservice.model.Person;
 import com.example.applicationstatusservice.model.dto.ApplicationStatusDTO;
+import com.example.applicationstatusservice.model.dto.PersonDTO;
 import com.example.applicationstatusservice.repository.PersonRepository;
 import com.example.applicationstatusservice.service.ApplicationStatusService;
+import com.example.applicationstatusservice.service.PersonService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +31,9 @@ public class ApplicationStatusIntegrationTest {
     private ApplicationStatusService applicationStatusService;
 
     @Autowired
+    private PersonService personService;
+
+    @Autowired
     private PersonRepository personRepository;
 
     @DynamicPropertySource
@@ -43,21 +48,16 @@ public class ApplicationStatusIntegrationTest {
     }
 
     @BeforeEach
-    void setup() {
-        Person person = new Person();
-        person.setPerson_id(1L);
-        person.setName("Clara");
-        person.setSurname("Eklund");
-        person.setPnr("200101012923");
-        person.setEmail("clara@kth.se");
-        person.setPassword("123");
-        person.setUsername("claraek");
-        personRepository.save(person);
+    void saveAPerson() {
+        PersonDTO personDTO = new PersonDTO( "Clara", "Eklund", "202203323434", "claraeklund@kth.com", "123", "claraek");
+        personService.saveApplicant(personDTO);
+
+        System.out.println("person" + personRepository.findByUsername("claraek"));
     }
 
     @Test
     void personIdValid() throws Exception {
-        ApplicationStatusDTO applicationStatusDTO = new ApplicationStatusDTO(1L, "Pending");
+        ApplicationStatusDTO applicationStatusDTO = new ApplicationStatusDTO(5L, "Pending");
         assertEquals("VALID_DATA", applicationStatusService.isPersonIdValid(applicationStatusDTO.getPerson_id()));
 
     }
@@ -71,28 +71,28 @@ public class ApplicationStatusIntegrationTest {
 
     @Test
     void statusPendingValid() throws Exception {
-        ApplicationStatusDTO applicationStatusDTO = new ApplicationStatusDTO(1L, "Pending");
+        ApplicationStatusDTO applicationStatusDTO = new ApplicationStatusDTO(7L, "Pending");
         assertEquals("VALID_DATA", applicationStatusService.isStatusValid(applicationStatusDTO.getStatus()));
 
     }
 
     @Test
     void statusAcceptValid() throws Exception {
-        ApplicationStatusDTO applicationStatusDTO = new ApplicationStatusDTO(11L, "Accept");
+        ApplicationStatusDTO applicationStatusDTO = new ApplicationStatusDTO(1L, "Accept");
         assertEquals("VALID_DATA", applicationStatusService.isStatusValid(applicationStatusDTO.getStatus()));
 
     }
 
     @Test
     void statusRejectValid() throws Exception {
-        ApplicationStatusDTO applicationStatusDTO = new ApplicationStatusDTO(11L, "Reject");
+        ApplicationStatusDTO applicationStatusDTO = new ApplicationStatusDTO(3L, "Reject");
         assertEquals("VALID_DATA", applicationStatusService.isStatusValid(applicationStatusDTO.getStatus()));
 
     }
 
     @Test
     void statusInvalid() throws Exception {
-        ApplicationStatusDTO applicationStatusDTO = new ApplicationStatusDTO(11L, "random");
+        ApplicationStatusDTO applicationStatusDTO = new ApplicationStatusDTO(4L, "random");
         assertEquals("INVALID_DATA", applicationStatusService.isStatusValid(applicationStatusDTO.getStatus()));
     }
 }

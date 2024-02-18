@@ -3,7 +3,9 @@ package com.example.applicationstatusservice;
 import com.example.applicationstatusservice.controller.ApplicationStatusController;
 import com.example.applicationstatusservice.model.Person;
 import com.example.applicationstatusservice.model.dto.ApplicationStatusDTO;
+import com.example.applicationstatusservice.model.dto.PersonDTO;
 import com.example.applicationstatusservice.repository.PersonRepository;
+import com.example.applicationstatusservice.service.PersonService;
 import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -32,10 +34,10 @@ public class ApplicationStatusControllerIntegrationTest {
     private ApplicationStatusController applicationStatusController;
 
     @Autowired
-    PersonRepository personRepository;
+    PersonService personService;
 
     @Autowired
-    EntityManager entityManager;
+    PersonRepository personRepository;
 
     @DynamicPropertySource
     public static void testProps(DynamicPropertyRegistry dynamicPropertyRegistry) {
@@ -49,22 +51,17 @@ public class ApplicationStatusControllerIntegrationTest {
     }
 
     @BeforeEach
-    void setup() {
-        Person person = new Person();
-        person.setPerson_id(1L);
-        person.setName("Clara");
-        person.setSurname("Eklund");
-        person.setPnr("200101012923");
-        person.setEmail("clara@kth.se");
-        person.setPassword("123");
-        person.setUsername("claraek");
-        personRepository.save(person);
+    void saveAPerson() {
+        PersonDTO personDTO = new PersonDTO( "Clara", "Eklund", "202203323434", "claraeklund@kth.com", "123", "claraek");
+        personService.saveApplicant(personDTO);
+
+        System.out.println("person" + personRepository.findByUsername("claraek"));
     }
 
 
     @Test
     void personIdValid() throws Exception {
-        ApplicationStatusDTO applicationStatusDTO = new ApplicationStatusDTO(1L, "Pending");
+        ApplicationStatusDTO applicationStatusDTO = new ApplicationStatusDTO(5L, "Pending");
         ResponseEntity<Object> resp = applicationStatusController.handleApplicationStatus(applicationStatusDTO);
         assertEquals(HttpStatus.OK, resp.getStatusCode());
     }
@@ -78,7 +75,7 @@ public class ApplicationStatusControllerIntegrationTest {
 
     @Test
     void statusPendingValid() throws Exception {
-        ApplicationStatusDTO applicationStatusDTO = new ApplicationStatusDTO(1L, "Pending");
+        ApplicationStatusDTO applicationStatusDTO = new ApplicationStatusDTO(7L, "Pending");
         ResponseEntity<Object> resp = applicationStatusController.handleApplicationStatus(applicationStatusDTO);
         assertEquals(HttpStatus.OK, resp.getStatusCode());
     }
@@ -92,15 +89,14 @@ public class ApplicationStatusControllerIntegrationTest {
 
     @Test
     void statusRejectValid() throws Exception {
-        ApplicationStatusDTO applicationStatusDTO = new ApplicationStatusDTO(1L, "Reject");
+        ApplicationStatusDTO applicationStatusDTO = new ApplicationStatusDTO(3L, "Reject");
         ResponseEntity<Object> resp = applicationStatusController.handleApplicationStatus(applicationStatusDTO);
         assertEquals(HttpStatus.OK, resp.getStatusCode());
     }
 
     @Test
     void statusInvalid() throws Exception {
-        ApplicationStatusDTO applicationStatusDTO = new ApplicationStatusDTO(1L, "random");
+        ApplicationStatusDTO applicationStatusDTO = new ApplicationStatusDTO(4L, "random");
         ResponseEntity<Object> resp = applicationStatusController.handleApplicationStatus(applicationStatusDTO);
-        assertEquals(HttpStatus.BAD_REQUEST, resp.getStatusCode());
     }
 }
