@@ -1,1 +1,1 @@
-web: java -Dserver.port=$PORT -jar target/register-service-0.0.1-SNAPSHOT.jar -DskipTests
+web: java -Dserver.port=$PORT -jar target/application-status-service-0.0.1-SNAPSHOT.jar -DskipTests
