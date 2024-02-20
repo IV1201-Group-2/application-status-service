@@ -23,7 +23,7 @@ public class ApplicationStatusController {
 
     @GetMapping("/api/applicant")
     public String applicationPage() {
-        return "application";
+        return "applicant";
     }
 
     @PostMapping(value = "/api/applicant", produces = "application/json")
