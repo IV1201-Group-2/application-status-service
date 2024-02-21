@@ -10,5 +10,12 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface PersonRepository extends JpaRepository<Person, Long> {
+    /**
+     * Retrieves the username from the database.
+     *
+     * @param Username represents the username that is being
+     *                 searched for in the database.
+     * @return Object of the type Person class.
+     */
     Person findByUsername(String Username);
 }
