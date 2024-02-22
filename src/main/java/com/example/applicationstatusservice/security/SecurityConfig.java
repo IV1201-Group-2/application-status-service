@@ -20,9 +20,6 @@ import javax.crypto.spec.SecretKeySpec;
 @EnableWebSecurity
 public class SecurityConfig {
 
-    @Value("${JWT_SECRET}")
-    private String JWT_SECRET;
-
     /**
      * @param http is the HttpSecurity that will be configured.
      * @return The configured filter chain.
@@ -32,24 +29,9 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.csrf(AbstractHttpConfigurer::disable).authorizeHttpRequests(requests -> requests.
-                        requestMatchers("/api/applicant", "/error", "/api/test").authenticated())
-                .oauth2ResourceServer(oauth2 -> oauth2
-                        .jwt(jwt -> jwt
-                                .decoder(jwtDecoder())
-                        )
-                );
+                        requestMatchers("/api/applicant", "/error", "/api/test").permitAll());
 
         return http.build();
-    }
-
-    /**
-     * A method to decode JWT tokens using the HS256 algorithm.
-     *
-     * @return a JwtDecoder object.
-     */
-    private JwtDecoder jwtDecoder() {
-        SecretKeySpec key = new SecretKeySpec(JWT_SECRET.getBytes(), "HS256");
-        return NimbusJwtDecoder.withSecretKey(key).build();
     }
 
 }
