@@ -1,10 +1,10 @@
-name: Merge a feature branch to develop upon passing CI
+name: CI
 
 # Controls when the workflow will run
 on:
   push:
     branches:
-      - 'feature/*'
+      - 'develop'
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
