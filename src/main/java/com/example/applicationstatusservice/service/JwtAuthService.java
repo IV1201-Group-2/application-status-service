@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Value;
 
 import javax.crypto.spec.SecretKeySpec;
+import java.nio.charset.StandardCharsets;
 
 /**
  * JwtAuthService is a service class meant to handle the logic
@@ -38,7 +39,7 @@ public class JwtAuthService {
     public String jwtAuth(String header) {
         String jwtToken = header.replace("Bearer ", "");
         logger.debug("Currently processed JWT token: {} ", jwtToken);
-        SecretKeySpec secKey = new SecretKeySpec(JWT_SECRET.getBytes(),
+        SecretKeySpec secKey = new SecretKeySpec(JWT_SECRET.getBytes(StandardCharsets.UTF_8),
                 SignatureAlgorithm.HS256.getJcaName());
         try {
             Jws<Claims> parseJwtClaims = Jwts.parserBuilder()
