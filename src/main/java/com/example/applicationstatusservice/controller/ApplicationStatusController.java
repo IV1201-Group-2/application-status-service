@@ -3,10 +3,10 @@ package com.example.applicationstatusservice.controller;
 import com.example.applicationstatusservice.model.dto.ApplicationStatusDTO;
 import com.example.applicationstatusservice.model.dto.ErrorDTO;
 import com.example.applicationstatusservice.service.ApplicationStatusService;
+import com.example.applicationstatusservice.service.JwtAuthService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import com.example.applicationstatusservice.service.JwtAuthService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -78,11 +78,11 @@ public class ApplicationStatusController {
         String statusErrorMessage = applicationStatusService.isStatusValid(applicationStatusDTO.getStatus());
 
         //Validation process to make sure person_id and status received is correct.
-        if ("INVALID_DATA".equals(personIdErrorMessage)) {
-            logger.error("The person with IP address: {} submitted an invalid person Id: {} ", IP, applicationStatusDTO.getPerson_id());
         if ("UNAUTHORIZED".equals(jwtTokenErrorMessage)) {
+            logger.error("The person with IP address: {} has unauthorized access with the provided JWT token ", IP);
             return new ResponseEntity<>(new ErrorDTO(jwtTokenErrorMessage), HttpStatus.BAD_REQUEST);
         } else if ("INVALID_DATA".equals(personIdErrorMessage)) {
+            logger.error("The person with IP address: {} submitted an invalid person Id: {} ", IP, applicationStatusDTO.getPerson_id());
             return new ResponseEntity<>(new ErrorDTO(personIdErrorMessage), HttpStatus.BAD_REQUEST);
         } else if ("INVALID_DATA".equals(statusErrorMessage)) {
             logger.error("The person with IP address: {} submitted an invalid status: {} ", IP, applicationStatusDTO.getStatus());

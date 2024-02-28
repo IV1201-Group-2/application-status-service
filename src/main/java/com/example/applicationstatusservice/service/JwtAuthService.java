@@ -4,6 +4,8 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Value;
 
@@ -15,6 +17,11 @@ import javax.crypto.spec.SecretKeySpec;
  */
 @Service
 public class JwtAuthService {
+
+    /**
+     * Logger to log events passing the JWT authentication and authorization logic.
+     */
+    private static final Logger logger = LogManager.getLogger(JwtAuthService.class);
 
     /**
      * Config variable JWT secret from Heroku.
@@ -30,6 +37,7 @@ public class JwtAuthService {
      */
     public String jwtAuth(String header) {
         String jwtToken = header.replace("Bearer ", "");
+        logger.debug("Currently processed JWT token: {} ", jwtToken);
         SecretKeySpec secKey = new SecretKeySpec(JWT_SECRET.getBytes(),
                 SignatureAlgorithm.HS256.getJcaName());
         try {
@@ -39,8 +47,10 @@ public class JwtAuthService {
             Claims claims = parseJwtClaims.getBody();
             Integer roleValue = claims.get("role", Integer.class);
             if (roleValue != null && roleValue.equals(1)) {
+                logger.info("Authorized user");
                 return "AUTHORIZED";
             } else {
+                logger.info("Unauthorized user");
                 return "UNAUTHORIZED";
             }
         } catch (Exception e) {
