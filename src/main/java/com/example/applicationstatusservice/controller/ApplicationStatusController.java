@@ -6,14 +6,12 @@ import com.example.applicationstatusservice.service.ApplicationStatusService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import com.example.applicationstatusservice.service.JwtAuthService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * ApplicationStatusController handles HTTP requests and
@@ -35,14 +33,19 @@ public class ApplicationStatusController {
      */
     private final ApplicationStatusService applicationStatusService;
 
+    private final JwtAuthService jwtAuthService;
+
     /**
      * The constructor for ApplicationStatusController.
      *
      * @param applicationStatusService is the service responsible for the business logic
      *                                 specific to status-related operations.
+     * @param jwtAuthService           is the service responsible for authentication and
+     *                                 authorization of JWT tokens.
      */
-    public ApplicationStatusController(ApplicationStatusService applicationStatusService) {
+    public ApplicationStatusController(ApplicationStatusService applicationStatusService, JwtAuthService jwtAuthService) {
         this.applicationStatusService = applicationStatusService;
+        this.jwtAuthService = jwtAuthService;
     }
 
     /**
@@ -66,17 +69,20 @@ public class ApplicationStatusController {
      */
     @PostMapping(value = "/api/applicant", produces = "application/json")
     @ResponseBody
-    public ResponseEntity<Object> handleApplicationStatus(@RequestBody ApplicationStatusDTO applicationStatusDTO, HttpServletRequest request) {
+    public ResponseEntity<Object> handleApplicationStatus(@RequestHeader("Authorization") String header, @RequestBody ApplicationStatusDTO applicationStatusDTO, HttpServletRequest request) {
         //IP address of the machine requesting to set/update application status.
         String IP = request.getRemoteAddr();
-
-        //Error messages in case of an invalid person_id or an invalid status.
+        //Error messages in case of an invalid person_id or an invalid status or an invalid JWT token.
+        String jwtTokenErrorMessage = jwtAuthService.jwtAuth(header);
         String personIdErrorMessage = applicationStatusService.isPersonIdValid(applicationStatusDTO.getPerson_id());
         String statusErrorMessage = applicationStatusService.isStatusValid(applicationStatusDTO.getStatus());
 
         //Validation process to make sure person_id and status received is correct.
         if ("INVALID_DATA".equals(personIdErrorMessage)) {
             logger.error("The person with IP address: {} submitted an invalid person Id: {} ", IP, applicationStatusDTO.getPerson_id());
+        if ("UNAUTHORIZED".equals(jwtTokenErrorMessage)) {
+            return new ResponseEntity<>(new ErrorDTO(jwtTokenErrorMessage), HttpStatus.BAD_REQUEST);
+        } else if ("INVALID_DATA".equals(personIdErrorMessage)) {
             return new ResponseEntity<>(new ErrorDTO(personIdErrorMessage), HttpStatus.BAD_REQUEST);
         } else if ("INVALID_DATA".equals(statusErrorMessage)) {
             logger.error("The person with IP address: {} submitted an invalid status: {} ", IP, applicationStatusDTO.getStatus());
@@ -88,5 +94,4 @@ public class ApplicationStatusController {
         logger.info("The person with the IP address: {} has updated the application for person Id: {} with the status: {} ", IP, applicationStatusDTO.getPerson_id(), applicationStatusDTO.getStatus());
         return new ResponseEntity<>(new LinkedMultiValueMap<>(), HttpStatus.OK);
     }
-
 }
