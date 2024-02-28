@@ -27,6 +27,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  * the correct HTTP status response.
  * 2. Checking if a valid or invalid status, received through ApplicationStatusDTO returns
  * the correct HTTP status response.
+ * 3. Checking if a valid or invalid JWT token, received through header returns
+ * the correct HTTP status response.
  * {@code @Transactional} ensures application is saved to the database only if
  * the transaction is successful.
  */
@@ -62,6 +64,9 @@ public class ApplicationStatusControllerIntegrationTest {
      */
     @Autowired
     PersonRepository personRepository;
+
+    String testToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2FnZSI6ImxvZ2luIiwiaWQiOjUsInJvbGUiOjEsInVzZXJuYW1lIjoiTWF4d2VsbEJhaWxleSIsImV4cCI6MTcwOTA2MzA2MSwiaWF0IjoxNzA5MDU5NDYxfQ.lYZASF-3vemdk0_XGF_HhOmig4UR4PUfkoW0nf0-EZw";
+    String testHeader = "Bearer " + testToken;
 
     /**
      * The method sets the property JDBC URL spring.datasource.url
@@ -102,7 +107,7 @@ public class ApplicationStatusControllerIntegrationTest {
     @Test
     void personIdValid() throws Exception {
         ApplicationStatusDTO applicationStatusDTO = new ApplicationStatusDTO(5L, "Pending");
-        ResponseEntity<Object> resp = applicationStatusController.handleApplicationStatus(applicationStatusDTO);
+        ResponseEntity<Object> resp = applicationStatusController.handleApplicationStatus(testHeader, applicationStatusDTO);
         assertEquals(HttpStatus.OK, resp.getStatusCode());
     }
 
@@ -112,7 +117,7 @@ public class ApplicationStatusControllerIntegrationTest {
     @Test
     void personIdInvalid() throws Exception {
         ApplicationStatusDTO applicationStatusDTO = new ApplicationStatusDTO(4000L, "Pending");
-        ResponseEntity<Object> resp = applicationStatusController.handleApplicationStatus(applicationStatusDTO);
+        ResponseEntity<Object> resp = applicationStatusController.handleApplicationStatus(testHeader, applicationStatusDTO);
         assertEquals(HttpStatus.BAD_REQUEST, resp.getStatusCode());
     }
 
@@ -122,7 +127,7 @@ public class ApplicationStatusControllerIntegrationTest {
     @Test
     void statusPendingValid() throws Exception {
         ApplicationStatusDTO applicationStatusDTO = new ApplicationStatusDTO(7L, "Pending");
-        ResponseEntity<Object> resp = applicationStatusController.handleApplicationStatus(applicationStatusDTO);
+        ResponseEntity<Object> resp = applicationStatusController.handleApplicationStatus(testHeader, applicationStatusDTO);
         assertEquals(HttpStatus.OK, resp.getStatusCode());
     }
 
@@ -132,7 +137,7 @@ public class ApplicationStatusControllerIntegrationTest {
     @Test
     void statusAcceptValid() throws Exception {
         ApplicationStatusDTO applicationStatusDTO = new ApplicationStatusDTO(1L, "Accept");
-        ResponseEntity<Object> resp = applicationStatusController.handleApplicationStatus(applicationStatusDTO);
+        ResponseEntity<Object> resp = applicationStatusController.handleApplicationStatus(testHeader, applicationStatusDTO);
         assertEquals(HttpStatus.OK, resp.getStatusCode());
     }
 
@@ -142,7 +147,7 @@ public class ApplicationStatusControllerIntegrationTest {
     @Test
     void statusRejectValid() throws Exception {
         ApplicationStatusDTO applicationStatusDTO = new ApplicationStatusDTO(3L, "Reject");
-        ResponseEntity<Object> resp = applicationStatusController.handleApplicationStatus(applicationStatusDTO);
+        ResponseEntity<Object> resp = applicationStatusController.handleApplicationStatus(testHeader, applicationStatusDTO);
         assertEquals(HttpStatus.OK, resp.getStatusCode());
     }
 
@@ -152,6 +157,31 @@ public class ApplicationStatusControllerIntegrationTest {
     @Test
     void statusInvalid() throws Exception {
         ApplicationStatusDTO applicationStatusDTO = new ApplicationStatusDTO(4L, "random");
-        ResponseEntity<Object> resp = applicationStatusController.handleApplicationStatus(applicationStatusDTO);
+        ResponseEntity<Object> resp = applicationStatusController.handleApplicationStatus(testHeader, applicationStatusDTO);
+        assertEquals(HttpStatus.BAD_REQUEST, resp.getStatusCode());
+    }
+
+    /**
+     * JUnit test to check if a valid JWT token returns the correct HTTP Status response.
+     */
+    @Test
+    void jwtTokenValid() throws Exception {
+        ApplicationStatusDTO applicationStatusDTO = new ApplicationStatusDTO(4L, "random");
+        ResponseEntity<Object> resp = applicationStatusController.handleApplicationStatus(testHeader, applicationStatusDTO);
+        assertEquals(HttpStatus.OK, resp.getStatusCode());
+
+    }
+
+    /**
+     * JUnit test to check if an invalid JWT token returns the correct HTTP Status response.
+     */
+    @Test
+    void jwtTokenInValid() throws Exception {
+        String testToken = "yJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2FnZSI6ImxvZ2luIiwiaWQiOjUsInJvbGUiOjEsInVzZXJuYW1lIjoiTWF4d2VsbEJhaWxleSIsImV4cCI6MTcwOTA2MzA2MSwiaWF0IjoxNzA5MDU5NDYxfQ.lYZASF-3vemdk0_XGF_HhOmig4UR4PUfkoW0nf0-EZw";
+        String testHeader = "Bearer " + testToken;
+
+        ApplicationStatusDTO applicationStatusDTO = new ApplicationStatusDTO(4L, "random");
+        ResponseEntity<Object> resp = applicationStatusController.handleApplicationStatus(testHeader, applicationStatusDTO);
+        assertEquals(HttpStatus.BAD_REQUEST, resp.getStatusCode());
     }
 }
