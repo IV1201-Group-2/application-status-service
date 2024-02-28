@@ -66,7 +66,7 @@ public class ApplicationStatusControllerIntegrationTest {
     @Autowired
     PersonRepository personRepository;
 
-    String testToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2FnZSI6ImxvZ2luIiwiaWQiOjUsInJvbGUiOjEsInVzZXJuYW1lIjoiTWF4d2VsbEJhaWxleSIsImV4cCI6MTcwOTA2MzA2MSwiaWF0IjoxNzA5MDU5NDYxfQ.lYZASF-3vemdk0_XGF_HhOmig4UR4PUfkoW0nf0-EZw";
+    String testToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2FnZSI6ImxvZ2luIiwiaWQiOjUsInJvbGUiOjEsInVzZXJuYW1lIjoiTWF4d2VsbEJhaWxleSIsImV4cCI6MTcwOTE1NjE2MSwiaWF0IjoxNzA5MTUyNTYxfQ.sevPgpuRvgWU2nDjORn3KYSIJwC_5IvWkWDuOcHKz-0";
     String testHeader = "Bearer " + testToken;
 
     /**
@@ -136,7 +136,7 @@ public class ApplicationStatusControllerIntegrationTest {
         MockHttpServletRequest req = new MockHttpServletRequest();
         req.addHeader("X-Forwarded-For", "127.0.0.1");
 
-        ApplicationStatusDTO applicationStatusDTO = new ApplicationStatusDTO(7L, "Pending");
+        ApplicationStatusDTO applicationStatusDTO = new ApplicationStatusDTO(9L, "Pending");
         ResponseEntity<Object> resp = applicationStatusController.handleApplicationStatus(testHeader, applicationStatusDTO, req);
         assertEquals(HttpStatus.OK, resp.getStatusCode());
     }
@@ -188,7 +188,7 @@ public class ApplicationStatusControllerIntegrationTest {
         MockHttpServletRequest req = new MockHttpServletRequest();
         req.addHeader("X-Forwarded-For", "127.0.0.1");
 
-        ApplicationStatusDTO applicationStatusDTO = new ApplicationStatusDTO(4L, "random");
+        ApplicationStatusDTO applicationStatusDTO = new ApplicationStatusDTO(6L, "Pending");
         ResponseEntity<Object> resp = applicationStatusController.handleApplicationStatus(testHeader, applicationStatusDTO, req);
         assertEquals(HttpStatus.OK, resp.getStatusCode());
 
@@ -202,10 +202,10 @@ public class ApplicationStatusControllerIntegrationTest {
         MockHttpServletRequest req = new MockHttpServletRequest();
         req.addHeader("X-Forwarded-For", "127.0.0.1");
         
-        String testToken = "yJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2FnZSI6ImxvZ2luIiwiaWQiOjUsInJvbGUiOjEsInVzZXJuYW1lIjoiTWF4d2VsbEJhaWxleSIsImV4cCI6MTcwOTA2MzA2MSwiaWF0IjoxNzA5MDU5NDYxfQ.lYZASF-3vemdk0_XGF_HhOmig4UR4PUfkoW0nf0-EZw";
+        String testToken = "yJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2FnZSI6ImxvZ2luIiwiaWQiOjUsInJvbGUiOjEsInVzZXJuYW1lIjoiTWF4d2VsbEJhaWxleSIsImV4cCI6MTcwOTE1NjE2MSwiaWF0IjoxNzA5MTUyNTYxfQ.sevPgpuRvgWU2nDjORn3KYSIJwC_5IvWkWDuOcHKz-0";
         String testHeader = "Bearer " + testToken;
 
-        ApplicationStatusDTO applicationStatusDTO = new ApplicationStatusDTO(4L, "random");
+        ApplicationStatusDTO applicationStatusDTO = new ApplicationStatusDTO(4L, "Pending");
         ResponseEntity<Object> resp = applicationStatusController.handleApplicationStatus(testHeader, applicationStatusDTO, req);
         assertEquals(HttpStatus.BAD_REQUEST, resp.getStatusCode());
     }

@@ -172,7 +172,7 @@ public class ApplicationStatusIntegrationTest {
      */
     @Test
     void jwtTokenValid() throws Exception {
-        String testToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2FnZSI6ImxvZ2luIiwiaWQiOjUsInJvbGUiOjEsInVzZXJuYW1lIjoiTWF4d2VsbEJhaWxleSIsImV4cCI6MTcwOTA2MzA2MSwiaWF0IjoxNzA5MDU5NDYxfQ.lYZASF-3vemdk0_XGF_HhOmig4UR4PUfkoW0nf0-EZw";
+        String testToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2FnZSI6ImxvZ2luIiwiaWQiOjUsInJvbGUiOjEsInVzZXJuYW1lIjoiTWF4d2VsbEJhaWxleSIsImV4cCI6MTcwOTE1NjE2MSwiaWF0IjoxNzA5MTUyNTYxfQ.sevPgpuRvgWU2nDjORn3KYSIJwC_5IvWkWDuOcHKz-0";
         String testHeader = "Bearer " + testToken;
         assertEquals("AUTHORIZED", jwtAuthService.jwtAuth(testHeader));
     }
@@ -182,7 +182,7 @@ public class ApplicationStatusIntegrationTest {
      */
     @Test
     void jwtTokenInValid() throws Exception {
-        String testToken = "yJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2FnZSI6ImxvZ2luIiwiaWQiOjUsInJvbGUiOjEsInVzZXJuYW1lIjoiTWF4d2VsbEJhaWxleSIsImV4cCI6MTcwOTA2MzA2MSwiaWF0IjoxNzA5MDU5NDYxfQ.lYZASF-3vemdk0_XGF_HhOmig4UR4PUfkoW0nf0-EZw";
+        String testToken = "yJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2FnZSI6ImxvZ2luIiwiaWQiOjUsInJvbGUiOjEsInVzZXJuYW1lIjoiTWF4d2VsbEJhaWxleSIsImV4cCI6MTcwOTE1NjE2MSwiaWF0IjoxNzA5MTUyNTYxfQ.sevPgpuRvgWU2nDjORn3KYSIJwC_5IvWkWDuOcHKz-0";
         String testHeader = "Bearer " + testToken;
         assertEquals("UNAUTHORIZED", jwtAuthService.jwtAuth(testHeader));
     }
