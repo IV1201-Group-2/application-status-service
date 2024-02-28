@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.transaction.annotation.Transactional;
@@ -101,8 +102,11 @@ public class ApplicationStatusControllerIntegrationTest {
      */
     @Test
     void personIdValid() throws Exception {
+        MockHttpServletRequest req = new MockHttpServletRequest();
+        req.addHeader("X-Forwarded-For", "127.0.0.1");
+
         ApplicationStatusDTO applicationStatusDTO = new ApplicationStatusDTO(5L, "Pending");
-        ResponseEntity<Object> resp = applicationStatusController.handleApplicationStatus(applicationStatusDTO);
+        ResponseEntity<Object> resp = applicationStatusController.handleApplicationStatus(applicationStatusDTO, req);
         assertEquals(HttpStatus.OK, resp.getStatusCode());
     }
 
@@ -111,8 +115,11 @@ public class ApplicationStatusControllerIntegrationTest {
      */
     @Test
     void personIdInvalid() throws Exception {
+        MockHttpServletRequest req = new MockHttpServletRequest();
+        req.addHeader("X-Forwarded-For", "127.0.0.1");
+
         ApplicationStatusDTO applicationStatusDTO = new ApplicationStatusDTO(4000L, "Pending");
-        ResponseEntity<Object> resp = applicationStatusController.handleApplicationStatus(applicationStatusDTO);
+        ResponseEntity<Object> resp = applicationStatusController.handleApplicationStatus(applicationStatusDTO, req);
         assertEquals(HttpStatus.BAD_REQUEST, resp.getStatusCode());
     }
 
@@ -121,8 +128,11 @@ public class ApplicationStatusControllerIntegrationTest {
      */
     @Test
     void statusPendingValid() throws Exception {
+        MockHttpServletRequest req = new MockHttpServletRequest();
+        req.addHeader("X-Forwarded-For", "127.0.0.1");
+
         ApplicationStatusDTO applicationStatusDTO = new ApplicationStatusDTO(7L, "Pending");
-        ResponseEntity<Object> resp = applicationStatusController.handleApplicationStatus(applicationStatusDTO);
+        ResponseEntity<Object> resp = applicationStatusController.handleApplicationStatus(applicationStatusDTO, req);
         assertEquals(HttpStatus.OK, resp.getStatusCode());
     }
 
@@ -131,8 +141,11 @@ public class ApplicationStatusControllerIntegrationTest {
      */
     @Test
     void statusAcceptValid() throws Exception {
+        MockHttpServletRequest req = new MockHttpServletRequest();
+        req.addHeader("X-Forwarded-For", "127.0.0.1");
+
         ApplicationStatusDTO applicationStatusDTO = new ApplicationStatusDTO(1L, "Accept");
-        ResponseEntity<Object> resp = applicationStatusController.handleApplicationStatus(applicationStatusDTO);
+        ResponseEntity<Object> resp = applicationStatusController.handleApplicationStatus(applicationStatusDTO, req);
         assertEquals(HttpStatus.OK, resp.getStatusCode());
     }
 
@@ -141,8 +154,11 @@ public class ApplicationStatusControllerIntegrationTest {
      */
     @Test
     void statusRejectValid() throws Exception {
+        MockHttpServletRequest req = new MockHttpServletRequest();
+        req.addHeader("X-Forwarded-For", "127.0.0.1");
+
         ApplicationStatusDTO applicationStatusDTO = new ApplicationStatusDTO(3L, "Reject");
-        ResponseEntity<Object> resp = applicationStatusController.handleApplicationStatus(applicationStatusDTO);
+        ResponseEntity<Object> resp = applicationStatusController.handleApplicationStatus(applicationStatusDTO, req);
         assertEquals(HttpStatus.OK, resp.getStatusCode());
     }
 
@@ -151,7 +167,10 @@ public class ApplicationStatusControllerIntegrationTest {
      */
     @Test
     void statusInvalid() throws Exception {
+        MockHttpServletRequest req = new MockHttpServletRequest();
+        req.addHeader("X-Forwarded-For", "127.0.0.1");
+
         ApplicationStatusDTO applicationStatusDTO = new ApplicationStatusDTO(4L, "random");
-        ResponseEntity<Object> resp = applicationStatusController.handleApplicationStatus(applicationStatusDTO);
+        ResponseEntity<Object> resp = applicationStatusController.handleApplicationStatus(applicationStatusDTO, req);
     }
 }

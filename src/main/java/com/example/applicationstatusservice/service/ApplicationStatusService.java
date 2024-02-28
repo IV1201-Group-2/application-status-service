@@ -5,6 +5,8 @@ import com.example.applicationstatusservice.model.Person;
 import com.example.applicationstatusservice.model.dto.ApplicationStatusDTO;
 import com.example.applicationstatusservice.repository.ApplicationStatusRepository;
 import com.example.applicationstatusservice.repository.PersonRepository;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,6 +17,11 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @Service
 public class ApplicationStatusService {
+
+    /**
+     * Logger to log events passing the business-logic for application status insertion/update.
+     */
+    private static final Logger logger = LogManager.getLogger(ApplicationStatusService.class);
 
     /**
      * An instance of applicationStatusRepository used for data access/retrieval in the Application_status table.
@@ -59,9 +66,11 @@ public class ApplicationStatusService {
         if (checkApplicationStatus != null) {
             checkApplicationStatus.setStatus(status);
             applicationStatusRepository.save(checkApplicationStatus);
+            logger.info("The status of the application for person Id: {} has been updated to status: {} ", applicationStatusDTO.getPerson_id(), applicationStatusDTO.getStatus());
         } else if (person != null) {
             ApplicationStatus applicationStatus = ApplicationStatus.builder().person(person).status(applicationStatusDTO.getStatus()).build();
             applicationStatusRepository.save(applicationStatus);
+            logger.info("A new application status for person Id: {} has been set to status: {} ", applicationStatusDTO.getPerson_id(), applicationStatusDTO.getStatus());
         }
     }
 
@@ -73,9 +82,13 @@ public class ApplicationStatusService {
      * @return a response string indicating either a valid or an invalid person_id.
      */
     public String isPersonIdValid(Long personId) {
-        if (personRepository.existsById(personId)) {
+        boolean isPersonIdValid = personRepository.existsById(personId);
+        logger.debug("Check if person Id: {} exists: {} ", personId, isPersonIdValid);
+        if (isPersonIdValid) {
+            logger.info("Person Id: {} exists ", personId);
             return "VALID_DATA";
         }
+        logger.error("Person Id: {} does not exists ", personId);
         return "INVALID_DATA";
     }
 
@@ -87,6 +100,7 @@ public class ApplicationStatusService {
      * @return a response string indicating either a valid or an invalid status.
      */
     public String isStatusValid(String status) {
+        logger.info("Check to see if status: {} is valid", status);
         return switch (status) {
             case "Accept", "Reject", "Pending" -> "VALID_DATA";
             default -> "INVALID_DATA";

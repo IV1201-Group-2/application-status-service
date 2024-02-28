@@ -3,6 +3,9 @@ package com.example.applicationstatusservice.controller;
 import com.example.applicationstatusservice.model.dto.ApplicationStatusDTO;
 import com.example.applicationstatusservice.model.dto.ErrorDTO;
 import com.example.applicationstatusservice.service.ApplicationStatusService;
+import jakarta.servlet.http.HttpServletRequest;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -19,6 +22,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
  */
 @Controller
 public class ApplicationStatusController {
+
+    /**
+     * Logger to log events in the Controller layer.
+     */
+    private static final Logger logger = LogManager.getLogger(ApplicationStatusController.class);
+
 
     /**
      * An instance of ApplicationStatusService handling business
@@ -57,20 +66,26 @@ public class ApplicationStatusController {
      */
     @PostMapping(value = "/api/applicant", produces = "application/json")
     @ResponseBody
-    public ResponseEntity<Object> handleApplicationStatus(@RequestBody ApplicationStatusDTO applicationStatusDTO) {
+    public ResponseEntity<Object> handleApplicationStatus(@RequestBody ApplicationStatusDTO applicationStatusDTO, HttpServletRequest request) {
+        //IP address of the machine requesting to set/update application status.
+        String IP = request.getRemoteAddr();
+
         //Error messages in case of an invalid person_id or an invalid status.
         String personIdErrorMessage = applicationStatusService.isPersonIdValid(applicationStatusDTO.getPerson_id());
         String statusErrorMessage = applicationStatusService.isStatusValid(applicationStatusDTO.getStatus());
 
         //Validation process to make sure person_id and status received is correct.
         if ("INVALID_DATA".equals(personIdErrorMessage)) {
+            logger.error("The person with IP address: {} submitted an invalid person Id: {} ", IP, applicationStatusDTO.getPerson_id());
             return new ResponseEntity<>(new ErrorDTO(personIdErrorMessage), HttpStatus.BAD_REQUEST);
         } else if ("INVALID_DATA".equals(statusErrorMessage)) {
+            logger.error("The person with IP address: {} submitted an invalid status: {} ", IP, applicationStatusDTO.getStatus());
             return new ResponseEntity<>(new ErrorDTO(statusErrorMessage), HttpStatus.BAD_REQUEST);
         }
 
         //Inserts or updates the status of an application through the service-layer.
         applicationStatusService.updateApplicationStatus(applicationStatusDTO);
+        logger.info("The person with the IP address: {} has updated the application for person Id: {} with the status: {} ", IP, applicationStatusDTO.getPerson_id(), applicationStatusDTO.getStatus());
         return new ResponseEntity<>(new LinkedMultiValueMap<>(), HttpStatus.OK);
     }
 
