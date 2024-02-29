@@ -53,7 +53,7 @@ public class ApplicationStatusIntegrationTest {
     private ApplicationStatusService applicationStatusService;
 
     /**
-     * ApplicationStatusService is an autowired instance containing logic for authentication
+     * JwtAuthService is an autowired instance containing logic for authentication
      * and authorization of jwt tokens.
      * {@code @Autowired} provides automatic dependency injection.
      */
@@ -172,7 +172,7 @@ public class ApplicationStatusIntegrationTest {
      */
     @Test
     void jwtTokenValid() throws Exception {
-        String testToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2FnZSI6ImxvZ2luIiwiaWQiOjUsInJvbGUiOjEsInVzZXJuYW1lIjoiTWF4d2VsbEJhaWxleSIsImV4cCI6MTcwOTE1NjE2MSwiaWF0IjoxNzA5MTUyNTYxfQ.sevPgpuRvgWU2nDjORn3KYSIJwC_5IvWkWDuOcHKz-0";
+        String testToken = jwtAuthService.jwtCreateTestTokens();
         String testHeader = "Bearer " + testToken;
         assertEquals("AUTHORIZED", jwtAuthService.jwtAuth(testHeader));
     }
@@ -182,7 +182,7 @@ public class ApplicationStatusIntegrationTest {
      */
     @Test
     void jwtTokenInValid() throws Exception {
-        String testToken = "yJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2FnZSI6ImxvZ2luIiwiaWQiOjUsInJvbGUiOjEsInVzZXJuYW1lIjoiTWF4d2VsbEJhaWxleSIsImV4cCI6MTcwOTE1NjE2MSwiaWF0IjoxNzA5MTUyNTYxfQ.sevPgpuRvgWU2nDjORn3KYSIJwC_5IvWkWDuOcHKz-0";
+        String testToken = "INVALID_TOKEN";
         String testHeader = "Bearer " + testToken;
         assertEquals("UNAUTHORIZED", jwtAuthService.jwtAuth(testHeader));
     }

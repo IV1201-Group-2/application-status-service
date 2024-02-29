@@ -4,6 +4,7 @@ import com.example.applicationstatusservice.controller.ApplicationStatusControll
 import com.example.applicationstatusservice.model.dto.ApplicationStatusDTO;
 import com.example.applicationstatusservice.model.dto.PersonDTO;
 import com.example.applicationstatusservice.repository.PersonRepository;
+import com.example.applicationstatusservice.service.JwtAuthService;
 import com.example.applicationstatusservice.service.PersonService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -18,7 +19,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
@@ -54,6 +54,14 @@ public class ApplicationStatusControllerIntegrationTest {
     private ApplicationStatusController applicationStatusController;
 
     /**
+     * JwtAuthService is an autowired instance containing logic for authentication
+     * and authorization of jwt tokens.
+     * {@code @Autowired} provides automatic dependency injection.
+     */
+    @Autowired
+    private JwtAuthService jwtAuthService;
+
+    /**
      * PersonService is an autowired instance containing business-logic for person-related operations.
      * {@code @Autowired} provides automatic dependency injection.
      */
@@ -65,9 +73,6 @@ public class ApplicationStatusControllerIntegrationTest {
      */
     @Autowired
     PersonRepository personRepository;
-
-    String testToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2FnZSI6ImxvZ2luIiwiaWQiOjUsInJvbGUiOjEsInVzZXJuYW1lIjoiTWF4d2VsbEJhaWxleSIsImV4cCI6MTcwOTE1NjE2MSwiaWF0IjoxNzA5MTUyNTYxfQ.sevPgpuRvgWU2nDjORn3KYSIJwC_5IvWkWDuOcHKz-0";
-    String testHeader = "Bearer " + testToken;
 
     /**
      * The method sets the property JDBC URL spring.datasource.url
@@ -109,7 +114,8 @@ public class ApplicationStatusControllerIntegrationTest {
     void personIdValid() throws Exception {
         MockHttpServletRequest req = new MockHttpServletRequest();
         req.addHeader("X-Forwarded-For", "127.0.0.1");
-
+        String testToken = jwtAuthService.jwtCreateTestTokens();
+        String testHeader = "Bearer " + testToken;
         ApplicationStatusDTO applicationStatusDTO = new ApplicationStatusDTO(5L, "Pending");
         ResponseEntity<Object> resp = applicationStatusController.handleApplicationStatus(testHeader, applicationStatusDTO, req);
         assertEquals(HttpStatus.OK, resp.getStatusCode());
@@ -122,7 +128,8 @@ public class ApplicationStatusControllerIntegrationTest {
     void personIdInvalid() throws Exception {
         MockHttpServletRequest req = new MockHttpServletRequest();
         req.addHeader("X-Forwarded-For", "127.0.0.1");
-
+        String testToken = jwtAuthService.jwtCreateTestTokens();
+        String testHeader = "Bearer " + testToken;
         ApplicationStatusDTO applicationStatusDTO = new ApplicationStatusDTO(4000L, "Pending");
         ResponseEntity<Object> resp = applicationStatusController.handleApplicationStatus(testHeader, applicationStatusDTO, req);
         assertEquals(HttpStatus.BAD_REQUEST, resp.getStatusCode());
@@ -135,7 +142,8 @@ public class ApplicationStatusControllerIntegrationTest {
     void statusPendingValid() throws Exception {
         MockHttpServletRequest req = new MockHttpServletRequest();
         req.addHeader("X-Forwarded-For", "127.0.0.1");
-
+        String testToken = jwtAuthService.jwtCreateTestTokens();
+        String testHeader = "Bearer " + testToken;
         ApplicationStatusDTO applicationStatusDTO = new ApplicationStatusDTO(9L, "Pending");
         ResponseEntity<Object> resp = applicationStatusController.handleApplicationStatus(testHeader, applicationStatusDTO, req);
         assertEquals(HttpStatus.OK, resp.getStatusCode());
@@ -148,7 +156,8 @@ public class ApplicationStatusControllerIntegrationTest {
     void statusAcceptValid() throws Exception {
         MockHttpServletRequest req = new MockHttpServletRequest();
         req.addHeader("X-Forwarded-For", "127.0.0.1");
-
+        String testToken = jwtAuthService.jwtCreateTestTokens();
+        String testHeader = "Bearer " + testToken;
         ApplicationStatusDTO applicationStatusDTO = new ApplicationStatusDTO(1L, "Accept");
         ResponseEntity<Object> resp = applicationStatusController.handleApplicationStatus(testHeader, applicationStatusDTO, req);
         assertEquals(HttpStatus.OK, resp.getStatusCode());
@@ -161,7 +170,8 @@ public class ApplicationStatusControllerIntegrationTest {
     void statusRejectValid() throws Exception {
         MockHttpServletRequest req = new MockHttpServletRequest();
         req.addHeader("X-Forwarded-For", "127.0.0.1");
-
+        String testToken = jwtAuthService.jwtCreateTestTokens();
+        String testHeader = "Bearer " + testToken;
         ApplicationStatusDTO applicationStatusDTO = new ApplicationStatusDTO(3L, "Reject");
         ResponseEntity<Object> resp = applicationStatusController.handleApplicationStatus(testHeader, applicationStatusDTO, req);
         assertEquals(HttpStatus.OK, resp.getStatusCode());
@@ -174,7 +184,8 @@ public class ApplicationStatusControllerIntegrationTest {
     void statusInvalid() throws Exception {
         MockHttpServletRequest req = new MockHttpServletRequest();
         req.addHeader("X-Forwarded-For", "127.0.0.1");
-
+        String testToken = jwtAuthService.jwtCreateTestTokens();
+        String testHeader = "Bearer " + testToken;
         ApplicationStatusDTO applicationStatusDTO = new ApplicationStatusDTO(4L, "random");
         ResponseEntity<Object> resp = applicationStatusController.handleApplicationStatus(testHeader, applicationStatusDTO, req);
         assertEquals(HttpStatus.BAD_REQUEST, resp.getStatusCode());
@@ -187,7 +198,8 @@ public class ApplicationStatusControllerIntegrationTest {
     void jwtTokenValid() throws Exception {
         MockHttpServletRequest req = new MockHttpServletRequest();
         req.addHeader("X-Forwarded-For", "127.0.0.1");
-
+        String testToken = jwtAuthService.jwtCreateTestTokens();
+        String testHeader = "Bearer " + testToken;
         ApplicationStatusDTO applicationStatusDTO = new ApplicationStatusDTO(6L, "Pending");
         ResponseEntity<Object> resp = applicationStatusController.handleApplicationStatus(testHeader, applicationStatusDTO, req);
         assertEquals(HttpStatus.OK, resp.getStatusCode());
@@ -201,10 +213,8 @@ public class ApplicationStatusControllerIntegrationTest {
     void jwtTokenInValid() throws Exception {
         MockHttpServletRequest req = new MockHttpServletRequest();
         req.addHeader("X-Forwarded-For", "127.0.0.1");
-        
-        String testToken = "yJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2FnZSI6ImxvZ2luIiwiaWQiOjUsInJvbGUiOjEsInVzZXJuYW1lIjoiTWF4d2VsbEJhaWxleSIsImV4cCI6MTcwOTE1NjE2MSwiaWF0IjoxNzA5MTUyNTYxfQ.sevPgpuRvgWU2nDjORn3KYSIJwC_5IvWkWDuOcHKz-0";
+        String testToken = "INVALID_TOKEN";
         String testHeader = "Bearer " + testToken;
-
         ApplicationStatusDTO applicationStatusDTO = new ApplicationStatusDTO(4L, "Pending");
         ResponseEntity<Object> resp = applicationStatusController.handleApplicationStatus(testHeader, applicationStatusDTO, req);
         assertEquals(HttpStatus.BAD_REQUEST, resp.getStatusCode());
