@@ -1,6 +1,5 @@
 package com.example.applicationstatusservice.service;
 
-import com.example.applicationstatusservice.controller.ApplicationStatusController;
 import com.example.applicationstatusservice.model.Person;
 import com.example.applicationstatusservice.model.dto.PersonDTO;
 import com.example.applicationstatusservice.repository.PersonRepository;

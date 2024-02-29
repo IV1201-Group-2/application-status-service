@@ -33,6 +33,10 @@ public class ApplicationStatusController {
      */
     private final ApplicationStatusService applicationStatusService;
 
+    /**
+     * An instance of ApplicationStatusService handling
+     * logic specific to creating, authentication and authorization JWT tokens.
+     */
     private final JwtAuthService jwtAuthService;
 
     /**
@@ -40,7 +44,7 @@ public class ApplicationStatusController {
      *
      * @param applicationStatusService is the service responsible for the business logic
      *                                 specific to status-related operations.
-     * @param jwtAuthService           is the service responsible for authentication and
+     * @param jwtAuthService           is the service responsible for creating, authentication and
      *                                 authorization of JWT tokens.
      */
     public ApplicationStatusController(ApplicationStatusService applicationStatusService, JwtAuthService jwtAuthService) {

@@ -7,8 +7,9 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
+
 import javax.crypto.spec.SecretKeySpec;
 import java.nio.charset.StandardCharsets;
 
@@ -33,6 +34,7 @@ public class JwtAuthService {
 
     /**
      * Method for  authentication and authorization of JWT tokens.
+     *
      * @param header contains the encoded JWT token.
      * @return Response strings: AUTHORIZED for when the decoding and validation are successful and
      * UNAUTHORIZED for when decoding failed or role value was not 1.
@@ -40,12 +42,9 @@ public class JwtAuthService {
     public String jwtAuth(String header) {
         String jwtToken = header.replace("Bearer ", "");
         logger.debug("Currently processed JWT token: {} ", jwtToken);
-        SecretKeySpec secKey = new SecretKeySpec(JWT_SECRET.getBytes(StandardCharsets.UTF_8),
-                SignatureAlgorithm.HS256.getJcaName());
+        SecretKeySpec secKey = new SecretKeySpec(JWT_SECRET.getBytes(StandardCharsets.UTF_8), SignatureAlgorithm.HS256.getJcaName());
         try {
-            Jws<Claims> parseJwtClaims = Jwts.parserBuilder()
-                    .setSigningKey(secKey)
-                    .build().parseClaimsJws(jwtToken);
+            Jws<Claims> parseJwtClaims = Jwts.parserBuilder().setSigningKey(secKey).build().parseClaimsJws(jwtToken);
             Claims claims = parseJwtClaims.getBody();
             Integer roleValue = claims.get("role", Integer.class);
             if (roleValue != null && roleValue.equals(1)) {
@@ -65,17 +64,11 @@ public class JwtAuthService {
 
     /**
      * Creates JWT tokens to use during integration testing.
+     *
      * @return JWT tokens encoded using HS256 algorithm.
      */
-    public String jwtCreateTestTokens(){
-        SecretKeySpec keyTest = new SecretKeySpec(JWT_SECRET.getBytes(),
-                SignatureAlgorithm.HS256.getJcaName());
-        return Jwts.builder()
-                .claim("usage", "login")
-                .claim("id", 5)
-                .claim("username", "MaxwellBailey")
-                .claim("role", 1)
-                .signWith(keyTest)
-                .compact();
+    public String jwtCreateTestTokens() {
+        SecretKeySpec keyTest = new SecretKeySpec(JWT_SECRET.getBytes(), SignatureAlgorithm.HS256.getJcaName());
+        return Jwts.builder().claim("usage", "login").claim("id", 5).claim("username", "MaxwellBailey").claim("role", 1).signWith(keyTest).compact();
     }
 }
