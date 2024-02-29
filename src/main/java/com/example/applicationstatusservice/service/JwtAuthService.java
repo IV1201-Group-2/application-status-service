@@ -1,5 +1,6 @@
 package com.example.applicationstatusservice.service;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
@@ -16,6 +17,7 @@ import java.nio.charset.StandardCharsets;
  * for authentication and authorization of JWT tokens.
  */
 @Service
+@SuppressFBWarnings("DM_DEFAULT_ENCODING")
 public class JwtAuthService {
 
     /**
