@@ -77,8 +77,6 @@ public class ApplicationStatusController {
         //IP address of the machine requesting to set/update application status.
         String IP = request.getRemoteAddr();
 
-        String jwtToken = header.replace("Bearer ", "");
-        System.out.println("token" + jwtToken);
         //Error messages in case of an invalid person_id or an invalid status or an invalid JWT token.
         String jwtTokenErrorMessage = jwtAuthService.jwtAuth(header);
         String personIdErrorMessage = applicationStatusService.isPersonIdValid(applicationStatusDTO.getPerson_id());
@@ -86,14 +84,13 @@ public class ApplicationStatusController {
 
         //Validation process to make sure person_id and status received is correct.
         if ("UNAUTHORIZED".equals(jwtTokenErrorMessage)) {
-            System.out.println("token invalid");
-            logger.error("The person with IP address: {} has unauthorized access with the provided JWT token ", IP);
+            logger.warn("The person with IP address: {} has unauthorized access with the provided JWT token ", IP);
             return new ResponseEntity<>(new ErrorDTO(jwtTokenErrorMessage), HttpStatus.BAD_REQUEST);
         } else if ("INVALID_DATA".equals(personIdErrorMessage)) {
-            logger.error("The person with IP address: {} submitted an invalid person Id: {} ", IP, applicationStatusDTO.getPerson_id());
+            logger.warn("The person with IP address: {} submitted an invalid person Id: {} ", IP, applicationStatusDTO.getPerson_id());
             return new ResponseEntity<>(new ErrorDTO(personIdErrorMessage), HttpStatus.BAD_REQUEST);
         } else if ("INVALID_DATA".equals(statusErrorMessage)) {
-            logger.error("The person with IP address: {} submitted an invalid status: {} ", IP, applicationStatusDTO.getStatus());
+            logger.warn("The person with IP address: {} submitted an invalid status: {} ", IP, applicationStatusDTO.getStatus());
             return new ResponseEntity<>(new ErrorDTO(statusErrorMessage), HttpStatus.BAD_REQUEST);
         }
 

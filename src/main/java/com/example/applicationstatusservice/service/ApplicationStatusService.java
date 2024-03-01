@@ -66,11 +66,11 @@ public class ApplicationStatusService {
         if (checkApplicationStatus != null) {
             checkApplicationStatus.setStatus(status);
             applicationStatusRepository.save(checkApplicationStatus);
-            logger.info("The status of the application for person Id: {} has been updated to status: {} ", applicationStatusDTO.getPerson_id(), applicationStatusDTO.getStatus());
+            logger.debug("The status of the application for person Id: {} has been updated to status: {} ", applicationStatusDTO.getPerson_id(), applicationStatusDTO.getStatus());
         } else if (person != null) {
             ApplicationStatus applicationStatus = ApplicationStatus.builder().person(person).status(applicationStatusDTO.getStatus()).build();
             applicationStatusRepository.save(applicationStatus);
-            logger.info("A new application status for person Id: {} has been set to status: {} ", applicationStatusDTO.getPerson_id(), applicationStatusDTO.getStatus());
+            logger.debug("A new application status for person Id: {} has been set to status: {} ", applicationStatusDTO.getPerson_id(), applicationStatusDTO.getStatus());
         }
     }
 
@@ -85,10 +85,10 @@ public class ApplicationStatusService {
         boolean isPersonIdValid = personRepository.existsById(personId);
         logger.debug("Check if person Id: {} exists: {} ", personId, isPersonIdValid);
         if (isPersonIdValid) {
-            logger.info("Person Id: {} exists ", personId);
+            logger.debug("Person Id: {} exists ", personId);
             return "VALID_DATA";
         }
-        logger.error("Person Id: {} does not exists ", personId);
+        logger.debug("Person Id: {} does not exists ", personId);
         return "INVALID_DATA";
     }
 
@@ -100,7 +100,7 @@ public class ApplicationStatusService {
      * @return a response string indicating either a valid or an invalid status.
      */
     public String isStatusValid(String status) {
-        logger.info("Check to see if status: {} is valid", status);
+        logger.debug("Check to see if status: {} is valid", status);
         return switch (status) {
             case "Accept", "Reject", "Pending" -> "VALID_DATA";
             default -> "INVALID_DATA";

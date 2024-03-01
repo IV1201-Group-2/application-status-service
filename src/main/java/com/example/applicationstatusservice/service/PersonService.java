@@ -51,6 +51,6 @@ public class PersonService {
     public void saveApplicant(PersonDTO personDTO) {
         Person person = Person.builder().name(personDTO.getName()).surname(personDTO.getSurname()).pnr(personDTO.getPnr()).email(personDTO.getEmail()).password(personDTO.getPassword()).role_id(2).username(personDTO.getUsername()).build();
         personRepository.save(person);
-        logger.info("A new person has registered with username: {}", personDTO.getUsername());
+        logger.debug("A new person has registered with username: {}", personDTO.getUsername());
     }
 }

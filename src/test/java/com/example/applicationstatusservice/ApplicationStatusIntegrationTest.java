@@ -113,7 +113,7 @@ public class ApplicationStatusIntegrationTest {
      */
     @Test
     void personIdValid() throws Exception {
-        ApplicationStatusDTO applicationStatusDTO = new ApplicationStatusDTO(5L, "Pending");
+        ApplicationStatusDTO applicationStatusDTO = new ApplicationStatusDTO(6L, "Pending");
         assertEquals("VALID_DATA", applicationStatusService.isPersonIdValid(applicationStatusDTO.getPerson_id()));
 
     }
@@ -172,9 +172,19 @@ public class ApplicationStatusIntegrationTest {
      */
     @Test
     void jwtTokenValid() throws Exception {
-        String testToken = jwtAuthService.jwtCreateTestTokens();
+        String testToken = jwtAuthService.jwtCreateTestTokensRecruiter();
         String testHeader = "Bearer " + testToken;
         assertEquals("AUTHORIZED", jwtAuthService.jwtAuth(testHeader));
+    }
+
+    /**
+     * JUnit test to check if a valid JWT token returns the correct response message from the service-layer.
+     */
+    @Test
+    void jwtTokenInvalidRole() throws Exception {
+        String testToken = jwtAuthService.jwtCreateTestTokensApplicant();
+        String testHeader = "Bearer " + testToken;
+        assertEquals("UNAUTHORIZED", jwtAuthService.jwtAuth(testHeader));
     }
 
     /**

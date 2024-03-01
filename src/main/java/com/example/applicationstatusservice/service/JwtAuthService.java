@@ -48,27 +48,34 @@ public class JwtAuthService {
             Claims claims = parseJwtClaims.getBody();
             Integer roleValue = claims.get("role", Integer.class);
             if (roleValue != null && roleValue.equals(1)) {
-                System.out.println("role 1");
-                logger.info("Authorized user");
+                logger.debug("Authorized user");
                 return "AUTHORIZED";
             } else {
-                logger.info("Unauthorized user");
-                System.out.println("role isnt 1");
+                logger.debug("Unauthorized user");
                 return "UNAUTHORIZED";
             }
         } catch (Exception e) {
-            System.out.println("deep shit");
             return "UNAUTHORIZED";
         }
     }
 
     /**
-     * Creates JWT tokens to use during integration testing.
+     * Creates JWT tokens to use during integration testing with recruiter role.
      *
      * @return JWT tokens encoded using HS256 algorithm.
      */
-    public String jwtCreateTestTokens() {
+    public String jwtCreateTestTokensRecruiter() {
         SecretKeySpec keyTest = new SecretKeySpec(JWT_SECRET.getBytes(), SignatureAlgorithm.HS256.getJcaName());
         return Jwts.builder().claim("usage", "login").claim("id", 5).claim("username", "MaxwellBailey").claim("role", 1).signWith(keyTest).compact();
+    }
+
+    /**
+     * Creates JWT tokens to use during integration testing with applicant role.
+     *
+     * @return JWT tokens encoded using HS256 algorithm.
+     */
+    public String jwtCreateTestTokensApplicant() {
+        SecretKeySpec keyTest = new SecretKeySpec(JWT_SECRET.getBytes(), SignatureAlgorithm.HS256.getJcaName());
+        return Jwts.builder().claim("usage", "login").claim("id", 5).claim("username", "MaxwellBailey").claim("role", 2).signWith(keyTest).compact();
     }
 }
