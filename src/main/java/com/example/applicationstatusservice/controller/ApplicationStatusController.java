@@ -69,7 +69,7 @@ public class ApplicationStatusController {
      *
      * @param applicationStatusDTO Data transfer object representing status submitted information.
      *                             {@code @RequestBody} Provides the data embedded in the HTTP request.
-     * @return HTTP status and no header.
+     * @return HTTP status and an empty LinkedMultiValueMap as the body.
      */
     @PostMapping(value = "/api/applicant", produces = "application/json")
     @ResponseBody
