@@ -11,7 +11,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 /**
  * ApplicationStatusController handles HTTP requests and
@@ -50,16 +53,6 @@ public class ApplicationStatusController {
     public ApplicationStatusController(ApplicationStatusService applicationStatusService, JwtAuthService jwtAuthService) {
         this.applicationStatusService = applicationStatusService;
         this.jwtAuthService = jwtAuthService;
-    }
-
-    /**
-     * Method renders the registration HTML form.
-     *
-     * @return Renders the name of the HTMl page for the user.
-     */
-    @GetMapping("/api/applicant")
-    public String applicationPage() {
-        return "applicant";
     }
 
     /**
