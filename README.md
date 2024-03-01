@@ -1,12 +1,5 @@
 # Application Status Service
 
-## Table of Contents
-* [General Info](#general-info)
-* [Project Setup](#project-setup)
-* [Recommended IDE Setup](#recommended-ide-setup)
-* [File and Directory Semantics](#file-and-directory-semantics)
-* [Environment Variables](#environment-variables)
-
 ## General info
 This repository contains all files relevant to the backend Application Status Service:
 * Service written in Spring boot application handles backend application status insertion/update and validation process.
@@ -18,7 +11,7 @@ This repository contains all files relevant to the backend Application Status Se
 
 ## Project Setup
 
-### Perform compiling, test runs and packaging
+### Perform compiling, test runs, and packaging
 ```sh
 mvn clean install
 ```
@@ -49,42 +42,42 @@ mvn spotbugs:check
 - application-status-service
   - .github
     - workflows
-      - CI.yml -> On push, runs tests, static analysis, bug checks, linting and provides test coverage report
+      - CI.yml -> On push, runs tests, static analysis, bug checks, linting, and provides test coverage report
   - src
     - main
       - java
         - com.example.applicationstatusservice
               - ApplicationStatusServiceApplication.java -> Initiates spring boot server
-        - controller
-          - ApplicationStatusController -> Handles HTTP requests
-        - exception
-          - ExceptionHandler -> Throws a custom error in case of any general issues while the register microservice is running
-        - model
-          - dto
-            - ApplicationStatusDTO ->
-            - ErrorDTO -> Data transfer object presents various errors depending on the validation check
-            - PersonDTO -> Data transfer object containing person information required for registration
-          - ApplicationStatus -> Model representing the database structure created for each application status
-          - Person -> Model representing the database structure created for each registered user
-        - repository
-          - ApplicationStatusRepository -> Repository that contains methods for data retrieval/modification operations specific to application status
-          - PersonRepository -> Repository that contains methods for data retrieval/modification operations specific to registration
-        - security
-          - SecurityConfig -> Contains configurations and security settings
-          - WebConfiguration -> Configures mappings to allow Cross-origin requests
-        - service
-          - ApplicationStatusService -> Service handling business-logic specific to application-staus-related operations
-          - JwtAuthService -> Service handling logic specific to creating, authenticatin and authorizing Jwt tokens
-          - PersonService -> Service handling business-logic specific to person-related operations
+        - controller -> Handles HTTP requests
+          - ApplicationStatusController 
+        - exception - -> Throws a custom error in case of any general issues while the register microservice is running
+          - ExceptionHandler 
+        - model -> Models representing the database structure created for ApplicationStatus and Person 
+          - dto -> Data Transfer Objects
+            - ApplicationStatusDTO 
+            - ErrorDTO 
+            - PersonDTO 
+          - ApplicationStatus 
+          - Person
+        - repository -> Repositories that contain methods for data retrieval/modification operations
+          - ApplicationStatusRepository
+          - PersonRepository 
+        - security -> Contains configurations and security settings
+          - SecurityConfig 
+          - WebConfiguration
+        - service -> Service handling business-logic application-staus operations, person-related operations, and creating, authenticating, and authorizing Jwt token operations 
+          - ApplicationStatusService 
+          - JwtAuthService 
+          - PersonService 
    - resources
      - templates
        - application.properties -> Stores configuration properties
        - log4j.properties -> Configuration for logging
   - test
     - java
-      - com.example.applicationstatusservice
-        - ApplicationStatusControllerIntegrationTest -> Integration tests covering the controller layer 
-        - ApplicationStatusIntegrationTest -> Integration tests covering the service layer and repository layer
+      - com.example.applicationstatusservice ->  Integration tests covering all MVC layers
+        - ApplicationStatusControllerIntegrationTest 
+        - ApplicationStatusIntegrationTest 
 - procfile -> Process types 
 - system.properties -> Required Heroku settings
 - mwnw -> Build tool
