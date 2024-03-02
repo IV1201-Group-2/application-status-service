@@ -39,49 +39,63 @@ mvn spotbugs:check
 ```
 
 ## File and Directory Semantics
-- application-status-service
-  - .github
-    - workflows
-      - CI.yml -> On push, runs tests, static analysis, bug checks, linting, and provides test coverage report
-  - src
-    - main
-      - java
-        - com.example.applicationstatusservice
-              - ApplicationStatusServiceApplication.java -> Initiates spring boot server
-        - controller -> Handles HTTP requests
-          - ApplicationStatusController 
-        - exception - -> Throws a custom error in case of any general issues while the register microservice is running
-          - ExceptionHandler 
-        - model -> Models representing the database structure created for ApplicationStatus and Person 
-          - dto -> Data Transfer Objects
-            - ApplicationStatusDTO 
-            - ErrorDTO 
-            - PersonDTO 
-          - ApplicationStatus 
-          - Person
-        - repository -> Repositories that contain methods for data retrieval/modification operations
-          - ApplicationStatusRepository
-          - PersonRepository 
-        - security -> Contains configurations and security settings
-          - SecurityConfig 
-          - WebConfiguration
-        - service -> Service handling business-logic application-staus operations, person-related operations, and creating, authenticating, and authorizing Jwt token operations 
-          - ApplicationStatusService 
-          - JwtAuthService 
-          - PersonService 
-   - resources
-     - templates
-       - application.properties -> Stores configuration properties
-       - log4j.properties -> Configuration for logging
-  - test
-    - java
-      - com.example.applicationstatusservice ->  Integration tests covering all MVC layers
-        - ApplicationStatusControllerIntegrationTest 
-        - ApplicationStatusIntegrationTest 
-- procfile -> Process types 
-- system.properties -> Required Heroku settings
-- mwnw -> Build tool
-- ...
+
+```
+├─ .github
+│  └─ workflows
+│     └─ CI.yml                                                      - On push, runs tests, static analysis, bug checks, linting, and provides test coverage report
+├─ .gitignore
+├─ .mvn
+│  └─ wrapper
+│     ├─ maven-wrapper.jar
+│     └─ maven-wrapper.properties
+├─ LICENSE
+├─ Procfile
+├─ README.md
+├─ lombok.config
+├─ mvnw
+├─ mvnw.cmd
+├─ pom.xml
+├─ src
+│  ├─ main
+│  │  ├─ java
+│  │  │  └─ com
+│  │  │     └─ example
+│  │  │        └─ applicationstatusservice
+│  │  │           ├─ ApplicationStatusServiceApplication.java        - Initiates spring boot server
+│  │  │           ├─ controller                                      - Handles HTTP requests
+│  │  │           │  └─ ApplicationStatusController.java
+│  │  │           ├─ exception                                       - Throws a custom error in case of any general issues while the register microservice is running
+│  │  │           │  └─ ExceptionHandler.java
+│  │  │           ├─ model                                           - Models representing the database structure created for ApplicationStatus and Person 
+│  │  │           │  ├─ ApplicationStatus.java
+│  │  │           │  ├─ Person.java    
+│  │  │           │  └─ dto                                          - Data Transfer Objects
+│  │  │           │     ├─ ApplicationStatusDTO.java
+│  │  │           │     ├─ ErrorDTO.java
+│  │  │           │     └─ PersonDTO.java
+│  │  │           ├─ repository                                      - Repositories that contain methods for data retrieval/modification operations
+│  │  │           │  ├─ ApplicationStatusRepository.java
+│  │  │           │  └─ PersonRepository.java
+│  │  │           ├─ security                                        - Contains configurations and security settings
+│  │  │           │  ├─ SecurityConfig.java
+│  │  │           │  └─ WebConfiguration.java
+│  │  │           └─ service                                         - Service handling business-logic application-staus operations, person-related operations, and creating,           │  │  │                                                                authenticating, and authorizing Jwt token operations                                         
+│  │  │              ├─ ApplicationStatusService.java
+│  │  │              ├─ JwtAuthService.java
+│  │  │              └─ PersonService.java
+│  │  └─ resources                                                   - Stores configuration properties and configuration for logging
+│  │     ├─ application.properties                          
+│  │     └─ log4j.properties
+│  └─ test                                                           - Integration tests covering all MVC layers
+│     └─ java
+│        └─ com
+│           └─ example
+│              └─ applicationstatusservice  
+│                 ├─ ApplicationStatusControllerIntegrationTest.java
+│                 └─ ApplicationStatusIntegrationTest.java
+└─ system.properties                                                 - Required Heroku settings       
+```
 
 ## Environment Variables
 ### Heroku config variables required by Application Status Service
