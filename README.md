@@ -80,7 +80,7 @@ mvn spotbugs:check
 │  │  │           ├─ security                                        - Contains configurations and security settings
 │  │  │           │  ├─ SecurityConfig.java
 │  │  │           │  └─ WebConfiguration.java
-│  │  │           └─ service                                         - Service handling business-logic application-staus operations, person-related operations, and creating,           │  │  │                                                                authenticating, and authorizing Jwt token operations                                         
+│  │  │           └─ service                                         - Service handling business-logic                                       
 │  │  │              ├─ ApplicationStatusService.java
 │  │  │              ├─ JwtAuthService.java
 │  │  │              └─ PersonService.java
