@@ -31,7 +31,7 @@ public class Person {
      */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long person_id;
+    private Long personId;
 
     /**
      * {@code @Column} sets a length for the field "name".
