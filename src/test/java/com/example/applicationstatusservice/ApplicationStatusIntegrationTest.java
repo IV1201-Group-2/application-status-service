@@ -178,7 +178,7 @@ public class ApplicationStatusIntegrationTest {
     }
 
     /**
-     * JUnit test to check if a valid JWT token returns the correct response message from the service-layer.
+     * JUnit test to check if an invalid JWT token containing wrong role id returns the correct response message from the service-layer.
      */
     @Test
     void jwtTokenInvalidRole() throws Exception {
