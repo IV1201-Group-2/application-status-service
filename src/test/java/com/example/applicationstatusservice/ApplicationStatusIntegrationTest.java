@@ -1,5 +1,6 @@
 package com.example.applicationstatusservice;
 
+import com.example.applicationstatusservice.model.Person;
 import com.example.applicationstatusservice.model.dto.ApplicationStatusDTO;
 import com.example.applicationstatusservice.model.dto.PersonDTO;
 import com.example.applicationstatusservice.repository.PersonRepository;
@@ -97,23 +98,16 @@ public class ApplicationStatusIntegrationTest {
     }
 
     /**
-     * {@code @BeforeEach} Annotation ensures this method runs and fills
-     * the database with a person entity before each test.
-     */
-    @BeforeEach
-    void saveAPerson() {
-        PersonDTO personDTO = new PersonDTO("Clara", "Eklund", "202203323434", "claraeklund@kth.com", "123", "claraek");
-        personService.saveApplicant(personDTO);
-
-        System.out.println("person" + personRepository.findByUsername("claraek"));
-    }
-
-    /**
      * JUnit test to check if a valid person_id returns the correct response message from the service-layer.
      */
     @Test
     void personIdValid() throws Exception {
-        ApplicationStatusDTO applicationStatusDTO = new ApplicationStatusDTO(6L, "Pending");
+        PersonDTO personDTO = new PersonDTO("Clara", "Eklund", "202203323434", "claraeklund@kth.com", "123", "claraek");
+        personService.saveApplicant(personDTO);
+        Person person = personRepository.findByUsername("claraek");
+        Long personId = person.getPersonId();
+
+        ApplicationStatusDTO applicationStatusDTO = new ApplicationStatusDTO(personId, "Pending");
         assertEquals("VALID_DATA", applicationStatusService.isPersonIdValid(applicationStatusDTO.getPerson_id()));
 
     }
@@ -123,6 +117,9 @@ public class ApplicationStatusIntegrationTest {
      */
     @Test
     void personIdInvalid() throws Exception {
+        PersonDTO personDTO = new PersonDTO("Clara", "Eklund", "202203323434", "claraeklund@kth.com", "123", "claraek");
+        personService.saveApplicant(personDTO);
+
         ApplicationStatusDTO applicationStatusDTO = new ApplicationStatusDTO(4000L, "Pending");
         assertEquals("INVALID_DATA", applicationStatusService.isPersonIdValid(applicationStatusDTO.getPerson_id()));
 
@@ -133,7 +130,12 @@ public class ApplicationStatusIntegrationTest {
      */
     @Test
     void statusPendingValid() throws Exception {
-        ApplicationStatusDTO applicationStatusDTO = new ApplicationStatusDTO(7L, "Pending");
+        PersonDTO personDTO = new PersonDTO("Clara", "Eklund", "202203323434", "claraeklund@kth.com", "123", "claraek");
+        personService.saveApplicant(personDTO);
+        Person person = personRepository.findByUsername("claraek");
+        Long personId = person.getPersonId();
+
+        ApplicationStatusDTO applicationStatusDTO = new ApplicationStatusDTO(personId, "Pending");
         assertEquals("VALID_DATA", applicationStatusService.isStatusValid(applicationStatusDTO.getStatus()));
 
     }
@@ -142,8 +144,12 @@ public class ApplicationStatusIntegrationTest {
      * JUnit test to check if a valid status: Accept returns the correct response message from the service-layer.
      */
     @Test
-    void statusAcceptValid() throws Exception {
-        ApplicationStatusDTO applicationStatusDTO = new ApplicationStatusDTO(1L, "Accept");
+    void statusAcceptValid() throws Exception {PersonDTO personDTO = new PersonDTO("Clara", "Eklund", "202203323434", "claraeklund@kth.com", "123", "claraek");
+        personService.saveApplicant(personDTO);
+        Person person = personRepository.findByUsername("claraek");
+        Long personId = person.getPersonId();
+
+        ApplicationStatusDTO applicationStatusDTO = new ApplicationStatusDTO(personId, "Accept");
         assertEquals("VALID_DATA", applicationStatusService.isStatusValid(applicationStatusDTO.getStatus()));
 
     }
@@ -153,7 +159,12 @@ public class ApplicationStatusIntegrationTest {
      */
     @Test
     void statusRejectValid() throws Exception {
-        ApplicationStatusDTO applicationStatusDTO = new ApplicationStatusDTO(3L, "Reject");
+        PersonDTO personDTO = new PersonDTO("Clara", "Eklund", "202203323434", "claraeklund@kth.com", "123", "claraek");
+        personService.saveApplicant(personDTO);
+        Person person = personRepository.findByUsername("claraek");
+        Long personId = person.getPersonId();
+
+        ApplicationStatusDTO applicationStatusDTO = new ApplicationStatusDTO(personId, "Reject");
         assertEquals("VALID_DATA", applicationStatusService.isStatusValid(applicationStatusDTO.getStatus()));
 
     }
@@ -163,7 +174,12 @@ public class ApplicationStatusIntegrationTest {
      */
     @Test
     void statusInvalid() throws Exception {
-        ApplicationStatusDTO applicationStatusDTO = new ApplicationStatusDTO(4L, "random");
+        PersonDTO personDTO = new PersonDTO("Clara", "Eklund", "202203323434", "claraeklund@kth.com", "123", "claraek");
+        personService.saveApplicant(personDTO);
+        Person person = personRepository.findByUsername("claraek");
+        Long personId = person.getPersonId();
+
+        ApplicationStatusDTO applicationStatusDTO = new ApplicationStatusDTO(personId, "random");
         assertEquals("INVALID_DATA", applicationStatusService.isStatusValid(applicationStatusDTO.getStatus()));
     }
 
