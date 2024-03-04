@@ -7,7 +7,6 @@ import com.example.applicationstatusservice.repository.PersonRepository;
 import com.example.applicationstatusservice.service.ApplicationStatusService;
 import com.example.applicationstatusservice.service.JwtAuthService;
 import com.example.applicationstatusservice.service.PersonService;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -38,13 +37,19 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class ApplicationStatusIntegrationTest {
 
     /**
+     * Default password, managed in GitHub Actions Secrets & Variables
+     */
+    private static final String DEFAULT_PASS = System.getenv("DEFAULT_PASS");
+
+
+    /**
      * Mocking a PostgreSQL database for the integration tests.
      * The database is configured with a specific, name, username and
      * password as well as the latest postgreSQL version.
      * {@code @Container} sets the field as a TestContainer container.
      */
     @Container
-    private static final PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>("postgres:latest").withDatabaseName("postgresglobalapp").withUsername("postgres").withPassword("Qwerty123456!");
+    private static final PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>("postgres:latest").withDatabaseName("postgresglobalapp").withUsername("postgres").withPassword(DEFAULT_PASS);
 
     /**
      * ApplicationStatusService is an autowired instance containing business-logic for status-related operations.
@@ -144,7 +149,8 @@ public class ApplicationStatusIntegrationTest {
      * JUnit test to check if a valid status: Accept returns the correct response message from the service-layer.
      */
     @Test
-    void statusAcceptValid() throws Exception {PersonDTO personDTO = new PersonDTO("Clara", "Eklund", "202203323434", "claraeklund@kth.com", "123", "claraek");
+    void statusAcceptValid() throws Exception {
+        PersonDTO personDTO = new PersonDTO("Clara", "Eklund", "202203323434", "claraeklund@kth.com", "123", "claraek");
         personService.saveApplicant(personDTO);
         Person person = personRepository.findByUsername("claraek");
         Long personId = person.getPersonId();
