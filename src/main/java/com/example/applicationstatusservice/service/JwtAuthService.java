@@ -55,6 +55,7 @@ public class JwtAuthService {
                 return "UNAUTHORIZED";
             }
         } catch (Exception e) {
+            logger.debug("Exception caused in jwtAuth method: {} ", e.getMessage());
             return "UNAUTHORIZED";
         }
     }
