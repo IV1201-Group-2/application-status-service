@@ -40,18 +40,13 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class ApplicationStatusControllerIntegrationTest {
 
     /**
-     * Default password, managed in GitHub Actions Secrets & Variables
-     */
-    private static final String DEFAULT_PASS = System.getenv("DEFAULT_PASS");
-
-    /**
      * Mocking a PostgreSQL database for the integration tests.
      * The database is configured with a specific, name, username and
      * password as well as the latest postgreSQL version.
      * {@code @Container} sets the field as a TestContainer container.
      */
     @Container
-    private static final PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>("postgres:latest").withDatabaseName("postgresglobalapp").withUsername("postgres").withPassword(DEFAULT_PASS);
+    private static final PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>("postgres:latest").withDatabaseName("postgresglobalapp").withUsername("postgres").withPassword("Qwerty123456!");
 
     /**
      * ApplicationStatusController is an autowired instance of the controller handling HTTP requests.
